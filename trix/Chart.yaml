@@ -8,7 +8,7 @@ home: https://github.com/trixsec-dev/charts
 sources:
   - https://github.com/trixsec-dev/charts
 maintainers:
-  - name: Dave Altena
+  - name: davealtena
     url: https://github.com/davealtena
 keywords:
   - security
