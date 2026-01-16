@@ -1,4 +1,4 @@
-trix has been installed!
+trix-agent has been installed!
 
 1. Check the deployment status:
    kubectl get pods -l "app.kubernetes.io/name={{ include "trix.name" . }}" -n {{ .Release.Namespace }}
@@ -6,23 +6,21 @@ trix has been installed!
 2. View the logs:
    kubectl logs -l "app.kubernetes.io/name={{ include "trix.name" . }}" -n {{ .Release.Namespace }} -f
 
-3. Check vulnerability statistics:
-   kubectl exec -n {{ .Release.Namespace }} {{ include "trix.postgresql.fullname" . }}-0 -- \
-     psql -U {{ .Values.postgresql.user | default "trix" }} -c \
-     "SELECT state, severity, COUNT(*) FROM vulnerabilities GROUP BY state, severity"
+{{- if .Values.saas.enabled }}
 
-{{- if .Values.notifications.slack.enabled }}
+SaaS integration is enabled. The agent will sync:
+- Vulnerability data from Trivy Operator
+- Compliance benchmark results
+- Workload inventory
 
-Slack notifications are enabled. You will receive alerts for:
-- New vulnerabilities (severity >= {{ .Values.config.minSeverity }})
-- Fixed vulnerabilities
+Endpoint: {{ .Values.saas.endpoint }}
 {{- else }}
 
-Slack notifications are disabled. Enable them in values.yaml:
-  notifications:
-    slack:
-      enabled: true
-      webhookUrl: "https://hooks.slack.com/services/..."
+SaaS integration is disabled. Enable it in values.yaml:
+  saas:
+    enabled: true
+    endpoint: "https://app.trixsec.dev"
+    apiKey: "your-api-key"
 {{- end }}
 
-For more information, visit: https://github.com/davealtena/trix
+For more information, visit: https://github.com/trixsec-dev/trix

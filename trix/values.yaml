@@ -1,4 +1,4 @@
-# -- Number of replicas (only 1 supported for now due to database state)
+# -- Number of replicas
 replicaCount: 1
 
 image:
@@ -36,7 +36,7 @@ podSecurityContext:
 # -- Container security context
 securityContext:
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false  # SQLite needs to write to /data
   capabilities:
     drop:
       - ALL
@@ -59,46 +59,29 @@ tolerations: []
 # -- Affinity rules
 affinity: {}
 
-# Server configuration
+# Agent configuration
 config:
   # -- Poll interval for Trivy CRDs
   pollInterval: "5m"
   # -- Namespaces to watch (comma-separated, empty for all)
   namespaces: ""
-  # -- Minimum severity for notifications (CRITICAL, HIGH, MEDIUM, LOW)
-  minSeverity: "CRITICAL"
   # -- Log format (json or text)
   logFormat: "json"
   # -- Log level (debug, info, warn, error)
   logLevel: "info"
 
-# Notification configuration
-notifications:
-  slack:
-    # -- Enable Slack notifications
-    enabled: false
-    # -- Slack webhook URL (use existingSecret for production)
-    webhookUrl: ""
-    # -- Use existing secret for Slack webhook
-    existingSecret: ""
-    # -- Key in existing secret
-    existingSecretKey: "webhook-url"
-  webhook:
-    # -- Enable generic webhook notifications
-    enabled: false
-    # -- Webhook URL
-    url: ""
-  saas:
-    # -- Enable SaaS platform integration
-    enabled: false
-    # -- SaaS platform API endpoint (e.g., https://app.trixsec.dev)
-    endpoint: ""
-    # -- API key for authentication (use existingSecret for production)
-    apiKey: ""
-    # -- Use existing secret for API key
-    existingSecret: ""
-    # -- Key in existing secret
-    existingSecretKey: "api-key"
+# SaaS platform integration
+saas:
+  # -- Enable SaaS platform integration
+  enabled: false
+  # -- SaaS platform API endpoint (e.g., https://app.trixsec.dev)
+  endpoint: ""
+  # -- API key for authentication (use existingSecret for production)
+  apiKey: ""
+  # -- Use existing secret for API key
+  existingSecret: ""
+  # -- Key in existing secret
+  existingSecretKey: "api-key"
 
 # Health probes
 healthCheck:
@@ -119,54 +102,29 @@ readinessProbe:
   initialDelaySeconds: 5
   periodSeconds: 10
 
-# PostgreSQL configuration
-postgresql:
-  # -- Deploy PostgreSQL as part of this chart
+# Trivy Operator (dependency)
+# See knowledge/docs/trivy-configuration.md for detailed explanation
+trivy-operator:
+  # -- Enable Trivy Operator as a dependency
   enabled: true
-  # -- Use external PostgreSQL
-  external:
-    # -- External PostgreSQL host
-    host: ""
-    # -- External PostgreSQL port
-    port: 5432
-    # -- External PostgreSQL database
-    database: "trix"
-    # -- External PostgreSQL user
-    user: "trix"
-    # -- External PostgreSQL password (use existingSecret for production)
-    password: ""
-    # -- Use existing secret for PostgreSQL credentials
-    existingSecret: ""
-    # -- Key for username in existing secret
-    existingSecretUserKey: "username"
-    # -- Key for password in existing secret
-    existingSecretPasswordKey: "password"
-    # -- SSL mode
-    sslMode: "disable"
-  # Built-in PostgreSQL settings (when enabled: true)
-  image:
-    repository: postgres
-    tag: "16-alpine"
-    pullPolicy: IfNotPresent
-  # -- PostgreSQL resources
-  resources:
-    requests:
-      memory: 128Mi
-      cpu: 100m
-    limits:
-      memory: 512Mi
-  persistence:
-    # -- Enable persistence
+
+  trivy:
+    # -- Show all vulnerabilities, including those without fixes
+    ignoreUnfixed: false
+    # -- Scan job resources - increased for large images (Cilium, Istio, etc.)
+    # Default 100M causes OOMKilled on large images
+    resources:
+      requests:
+        cpu: 100m
+        memory: 500M
+      limits:
+        cpu: 500m
+        memory: 2Gi
+
+  # -- Enable CIS/NSA/PSS compliance scanning
+  compliance:
     enabled: true
-    # -- Storage class (empty for default)
-    storageClass: ""
-    # -- PVC size
-    size: 1Gi
-    # -- Access mode
-    accessMode: ReadWriteOnce
-  # -- PostgreSQL user
-  user: "trix"
-  # -- PostgreSQL password (auto-generated if empty)
-  password: ""
-  # -- PostgreSQL database
-  database: "trix"
+
+  # -- Report TTL - triggers daily re-scans when reports expire
+  # Without this, workloads are only scanned on deploy
+  scannerReportTTL: "24h"

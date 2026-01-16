@@ -26,6 +26,13 @@ rules:
   - apiGroups: [""]
     resources: ["services", "pods", "namespaces"]
     verbs: ["get", "list"]
+  # Workload resources for inventory
+  - apiGroups: ["apps"]
+    resources: ["deployments", "daemonsets", "statefulsets", "replicasets"]
+    verbs: ["get", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list"]
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses", "networkpolicies"]
     verbs: ["get", "list"]
