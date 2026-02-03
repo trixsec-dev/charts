@@ -1,10 +1,10 @@
 <div align="center">
-  <h1>trix helm charts</h1>
-  <p><strong>Helm charts for deploying Trix to Kubernetes</strong></p>
+  <h1>kijo helm charts</h1>
+  <p><strong>Helm charts for deploying Kijo to Kubernetes</strong></p>
 
   <p>
-    <a href="https://github.com/trixsec-dev/charts/releases"><img src="https://img.shields.io/github/v/release/trixsec-dev/charts?include_prereleases" alt="Release"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/github/license/trixsec-dev/charts" alt="License"></a>
+    <a href="https://github.com/kijosec/charts/releases"><img src="https://img.shields.io/github/v/release/kijosec/charts?include_prereleases" alt="Release"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/kijosec/charts" alt="License"></a>
   </p>
 </div>
 
@@ -14,19 +14,19 @@
 
 | Chart | Description |
 |-------|-------------|
-| [trix](./trix) | Trix Agent - Kubernetes security monitoring with vulnerability tracking |
+| [kijo](./kijo) | Kijo Agent - Kubernetes security monitoring with vulnerability tracking |
 
 ## Usage
 
 ```bash
-helm repo add trix https://trixsec-dev.github.io/charts
+helm repo add kijo https://kijosec.github.io/charts
 helm repo update
-helm install trix trix/trix -n trix-system --create-namespace
+helm install kijo kijo/kijo -n kijo-system --create-namespace
 ```
 
 ## Configuration
 
-See [trix/README.md](./trix/README.md) for all configuration options.
+See [kijo/README.md](./kijo/README.md) for all configuration options.
 
 ### Quick Start
 
@@ -43,13 +43,13 @@ notifications:
 ```
 
 ```bash
-helm install trix trix/trix -n trix-system --create-namespace -f values.yaml
+helm install kijo kijo/kijo -n kijo-system --create-namespace -f values.yaml
 ```
 
 ## Related Projects
 
-- [trix](https://github.com/trixsec-dev/trix) - CLI tool for querying Kubernetes security findings
-- [trix-agent](https://github.com/trixsec-dev/trix-agent) - In-cluster agent for continuous monitoring
+- [kijo](https://github.com/kijosec/kijo) - CLI tool for querying Kubernetes security findings
+- [kijo-agent](https://github.com/kijosec/kijo-agent) - In-cluster agent for continuous monitoring
 
 ## License
 

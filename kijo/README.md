@@ -1,20 +1,20 @@
-# trix
+# kijo
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Kubernetes Security Scanner with AI-Powered Triage and Continuous Monitoring
 
-**Homepage:** <https://github.com/trixsec-dev/trix-helm>
+**Homepage:** <https://github.com/kijosec/charts>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Dave Altena |  | <https://github.com/trixsec-dev> |
+| Dave Altena |  | <https://github.com/kijosec> |
 
 ## Source Code
 
-* <https://github.com/trixsec-dev/trix-helm>
+* <https://github.com/kijosec/charts>
 
 ## Prerequisites
 
@@ -25,15 +25,15 @@ Kubernetes Security Scanner with AI-Powered Triage and Continuous Monitoring
 ## Installation
 
 ```bash
-helm repo add trix https://trixsec-dev.github.io/trix-helm
+helm repo add kijo https://kijosec.github.io/charts
 helm repo update
-helm install trix trix/trix -n trix-system --create-namespace
+helm install kijo kijo/kijo -n kijo-system --create-namespace
 ```
 
 ### With Slack notifications
 
 ```bash
-helm install trix trix/trix -n trix-system --create-namespace \
+helm install kijo kijo/kijo -n kijo-system --create-namespace \
   --set notifications.slack.enabled=true \
   --set notifications.slack.webhookUrl="https://hooks.slack.com/services/..."
 ```
@@ -41,18 +41,18 @@ helm install trix trix/trix -n trix-system --create-namespace \
 ### With external PostgreSQL
 
 ```bash
-helm install trix trix/trix -n trix-system --create-namespace \
+helm install kijo kijo/kijo -n kijo-system --create-namespace \
   --set postgresql.enabled=false \
   --set postgresql.external.host=my-postgres.example.com \
-  --set postgresql.external.user=trix \
+  --set postgresql.external.user=kijo \
   --set postgresql.external.password=secret \
-  --set postgresql.external.database=trix
+  --set postgresql.external.database=kijo
 ```
 
 ## Uninstallation
 
 ```bash
-helm uninstall trix -n trix-system
+helm uninstall kijo -n kijo-system
 ```
 
 ## Values
@@ -68,7 +68,7 @@ helm uninstall trix -n trix-system
 | fullnameOverride | string | `""` | Override the full name |
 | healthCheck.port | int | `8080` | Port for health endpoints |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"ghcr.io/trixsec-dev/trix-agent"` | Image repository |
+| image.repository | string | `"ghcr.io/kijosec/kijo-agent"` | Image repository |
 | image.tag | string | `""` | Image tag (defaults to appVersion) |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | livenessProbe.httpGet.path | string | `"/healthz"` |  |
@@ -79,7 +79,7 @@ helm uninstall trix -n trix-system
 | nodeSelector | object | `{}` | Node selector |
 | notifications.saas.apiKey | string | `""` | API key for authentication (use existingSecret for production) |
 | notifications.saas.enabled | bool | `false` | Enable SaaS platform integration |
-| notifications.saas.endpoint | string | `""` | SaaS platform API endpoint (e.g., https://app.trixsec.dev) |
+| notifications.saas.endpoint | string | `""` | SaaS platform API endpoint (e.g., https://app.kijo.dev) |
 | notifications.saas.existingSecret | string | `""` | Use existing secret for API key |
 | notifications.saas.existingSecretKey | string | `"api-key"` | Key in existing secret |
 | notifications.slack.enabled | bool | `false` | Enable Slack notifications |
@@ -90,10 +90,10 @@ helm uninstall trix -n trix-system
 | notifications.webhook.url | string | `""` | Webhook URL |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{"fsGroup":65534,"runAsNonRoot":true,"runAsUser":65534}` | Pod security context |
-| postgresql.database | string | `"trix"` | PostgreSQL database |
+| postgresql.database | string | `"kijo"` | PostgreSQL database |
 | postgresql.enabled | bool | `true` | Deploy PostgreSQL as part of this chart |
-| postgresql.external | object | `{"database":"trix","existingSecret":"","existingSecretPasswordKey":"password","existingSecretUserKey":"username","host":"","password":"","port":5432,"sslMode":"disable","user":"trix"}` | Use external PostgreSQL |
-| postgresql.external.database | string | `"trix"` | External PostgreSQL database |
+| postgresql.external | object | `{"database":"kijo","existingSecret":"","existingSecretPasswordKey":"password","existingSecretUserKey":"username","host":"","password":"","port":5432,"sslMode":"disable","user":"kijo"}` | Use external PostgreSQL |
+| postgresql.external.database | string | `"kijo"` | External PostgreSQL database |
 | postgresql.external.existingSecret | string | `""` | Use existing secret for PostgreSQL credentials |
 | postgresql.external.existingSecretPasswordKey | string | `"password"` | Key for password in existing secret |
 | postgresql.external.existingSecretUserKey | string | `"username"` | Key for username in existing secret |
@@ -101,7 +101,7 @@ helm uninstall trix -n trix-system
 | postgresql.external.password | string | `""` | External PostgreSQL password (use existingSecret for production) |
 | postgresql.external.port | int | `5432` | External PostgreSQL port |
 | postgresql.external.sslMode | string | `"disable"` | SSL mode |
-| postgresql.external.user | string | `"trix"` | External PostgreSQL user |
+| postgresql.external.user | string | `"kijo"` | External PostgreSQL user |
 | postgresql.image.pullPolicy | string | `"IfNotPresent"` |  |
 | postgresql.image.repository | string | `"postgres"` |  |
 | postgresql.image.tag | string | `"16-alpine"` |  |
@@ -111,7 +111,7 @@ helm uninstall trix -n trix-system
 | postgresql.persistence.size | string | `"1Gi"` | PVC size |
 | postgresql.persistence.storageClass | string | `""` | Storage class (empty for default) |
 | postgresql.resources | object | `{"limits":{"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | PostgreSQL resources |
-| postgresql.user | string | `"trix"` | PostgreSQL user |
+| postgresql.user | string | `"kijo"` | PostgreSQL user |
 | readinessProbe.httpGet.path | string | `"/readyz"` |  |
 | readinessProbe.httpGet.port | string | `"health"` |  |
 | readinessProbe.initialDelaySeconds | int | `5` |  |

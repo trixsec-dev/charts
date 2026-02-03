@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "trix.fullname" . }}
+  name: {{ include "kijo.fullname" . }}
   labels:
-    {{- include "trix.labels" . | nindent 4 }}
+    {{- include "kijo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "trix.selectorLabels" . | nindent 6 }}
+      {{- include "kijo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,13 +16,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "trix.selectorLabels" . | nindent 8 }}
+        {{- include "kijo.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "trix.serviceAccountName" . }}
+      serviceAccountName: {{ include "kijo.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -30,25 +30,25 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: TRIX_DATABASE_PATH
-              value: /data/trix.db
-            - name: TRIX_POLL_INTERVAL
+            - name: KIJO_DATABASE_PATH
+              value: /data/kijo.db
+            - name: KIJO_POLL_INTERVAL
               value: {{ .Values.config.pollInterval | quote }}
             {{- if .Values.config.namespaces }}
-            - name: TRIX_NAMESPACES
+            - name: KIJO_NAMESPACES
               value: {{ .Values.config.namespaces | quote }}
             {{- end }}
-            - name: TRIX_LOG_FORMAT
+            - name: KIJO_LOG_FORMAT
               value: {{ .Values.config.logFormat | quote }}
-            - name: TRIX_LOG_LEVEL
+            - name: KIJO_LOG_LEVEL
               value: {{ .Values.config.logLevel | quote }}
             {{- if .Values.saas.enabled }}
-            - name: TRIX_SAAS_ENDPOINT
+            - name: KIJO_SAAS_ENDPOINT
               value: {{ .Values.saas.endpoint | quote }}
-            - name: TRIX_SAAS_API_KEY
+            - name: KIJO_SAAS_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.saas.existingSecret | default (printf "%s-saas" (include "trix.fullname" .)) }}
+                  name: {{ .Values.saas.existingSecret | default (printf "%s-saas" (include "kijo.fullname" .)) }}
                   key: {{ .Values.saas.existingSecretKey | default "api-key" }}
             {{- end }}
           ports:

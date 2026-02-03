@@ -21,15 +21,15 @@
 ## Installation
 
 ```bash
-helm repo add trix https://trixsec-dev.github.io/trix-helm
+helm repo add kijo https://kijosec.github.io/charts
 helm repo update
-helm install trix trix/trix -n trix-system --create-namespace
+helm install kijo kijo/kijo -n kijo-system --create-namespace
 ```
 
 ### With Slack notifications
 
 ```bash
-helm install trix trix/trix -n trix-system --create-namespace \
+helm install kijo kijo/kijo -n kijo-system --create-namespace \
   --set notifications.slack.enabled=true \
   --set notifications.slack.webhookUrl="https://hooks.slack.com/services/..."
 ```
@@ -37,18 +37,18 @@ helm install trix trix/trix -n trix-system --create-namespace \
 ### With external PostgreSQL
 
 ```bash
-helm install trix trix/trix -n trix-system --create-namespace \
+helm install kijo kijo/kijo -n kijo-system --create-namespace \
   --set postgresql.enabled=false \
   --set postgresql.external.host=my-postgres.example.com \
-  --set postgresql.external.user=trix \
+  --set postgresql.external.user=kijo \
   --set postgresql.external.password=secret \
-  --set postgresql.external.database=trix
+  --set postgresql.external.database=kijo
 ```
 
 ## Uninstallation
 
 ```bash
-helm uninstall trix -n trix-system
+helm uninstall kijo -n kijo-system
 ```
 
 {{ template "chart.requirementsSection" . }}

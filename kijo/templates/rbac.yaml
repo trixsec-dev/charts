@@ -2,9 +2,9 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "trix.fullname" . }}
+  name: {{ include "kijo.fullname" . }}
   labels:
-    {{- include "trix.labels" . | nindent 4 }}
+    {{- include "kijo.labels" . | nindent 4 }}
 rules:
   # Trivy Operator CRDs
   - apiGroups: ["aquasecurity.github.io"]
@@ -41,21 +41,21 @@ rules:
     resources: ["ingresses", "networkpolicies"]
     verbs: ["get", "list"]
   - apiGroups: ["gateway.networking.k8s.io"]
-    resources: ["gateways", "httproutes", "grpcroutes", "tcproutes", "udproutes"]
+    resources: ["gateways", "httproutes", "grpcroutes", "tcproutes", "tlsroutes"]
     verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "trix.fullname" . }}
+  name: {{ include "kijo.fullname" . }}
   labels:
-    {{- include "trix.labels" . | nindent 4 }}
+    {{- include "kijo.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "trix.serviceAccountName" . }}
+    name: {{ include "kijo.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "trix.fullname" . }}
+  name: {{ include "kijo.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: ghcr.io/trixsec-dev/trix-agent
+  repository: ghcr.io/kijosec/kijo-agent
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Image tag (defaults to appVersion)
@@ -74,7 +74,7 @@ config:
 saas:
   # -- Enable SaaS platform integration
   enabled: false
-  # -- SaaS platform API endpoint (e.g., https://app.trixsec.dev)
+  # -- SaaS platform API endpoint (e.g., https://app.kijo.dev)
   endpoint: ""
   # -- API key for authentication (use existingSecret for production)
   apiKey: ""

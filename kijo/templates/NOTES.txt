@@ -1,10 +1,10 @@
-trix-agent has been installed!
+kijo-agent has been installed!
 
 1. Check the deployment status:
-   kubectl get pods -l "app.kubernetes.io/name={{ include "trix.name" . }}" -n {{ .Release.Namespace }}
+   kubectl get pods -l "app.kubernetes.io/name={{ include "kijo.name" . }}" -n {{ .Release.Namespace }}
 
 2. View the logs:
-   kubectl logs -l "app.kubernetes.io/name={{ include "trix.name" . }}" -n {{ .Release.Namespace }} -f
+   kubectl logs -l "app.kubernetes.io/name={{ include "kijo.name" . }}" -n {{ .Release.Namespace }} -f
 
 {{- if .Values.saas.enabled }}
 
@@ -19,8 +19,8 @@ Endpoint: {{ .Values.saas.endpoint }}
 SaaS integration is disabled. Enable it in values.yaml:
   saas:
     enabled: true
-    endpoint: "https://app.trixsec.dev"
+    endpoint: "https://app.kijo.dev"
     apiKey: "your-api-key"
 {{- end }}
 
-For more information, visit: https://github.com/trixsec-dev/trix
+For more information, visit: https://github.com/kijosec/kijo
