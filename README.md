@@ -21,7 +21,12 @@
 ```bash
 helm repo add kijo https://kijosec.github.io/charts
 helm repo update
-helm install kijo kijo/kijo -n kijo-system --create-namespace
+
+# Install in kijo namespace (recommended)
+helm install kijo kijo/kijo -n kijo
+
+# Or install with custom namespace
+helm install kijo kijo/kijo -n custom-namespace --set namespaceCreate=false
 ```
 
 ## Configuration
@@ -43,7 +48,7 @@ notifications:
 ```
 
 ```bash
-helm install kijo kijo/kijo -n kijo-system --create-namespace -f values.yaml
+helm install kijo kijo/kijo -n kijo -f values.yaml
 ```
 
 ## Related Projects

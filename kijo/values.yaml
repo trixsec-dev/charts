@@ -1,6 +1,12 @@
 # -- Number of replicas
 replicaCount: 1
 
+# Namespace configuration
+# -- Target namespace for deployment (used when namespaceCreate is true)
+namespace: "kijo"
+# -- Create the target namespace (set to false if namespace already exists)
+namespaceCreate: true
+
 image:
   # -- Image repository
   repository: ghcr.io/kijosec/agent
