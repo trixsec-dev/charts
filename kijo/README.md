@@ -1,8 +1,8 @@
 # kijo
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.2.1](https://img.shields.io/badge/AppVersion-v0.2.1-informational?style=flat-square)
 
-Kubernetes Security Scanner with AI-Powered Triage and Continuous Monitoring
+Kubernetes Security Agent for Vulnerability Scanning and Monitoring
 
 **Homepage:** <https://github.com/kijosec/charts>
 
@@ -10,7 +10,7 @@ Kubernetes Security Scanner with AI-Powered Triage and Continuous Monitoring
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Dave Altena |  | <https://github.com/kijosec> |
+| kijosec |  | <https://github.com/kijosec> |
 
 ## Source Code
 
@@ -55,6 +55,12 @@ helm install kijo kijo/kijo -n kijo-system --create-namespace \
 helm uninstall kijo -n kijo-system
 ```
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://aquasecurity.github.io/helm-charts/ | trivy-operator | 0.31.x |
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -62,13 +68,12 @@ helm uninstall kijo -n kijo-system
 | affinity | object | `{}` | Affinity rules |
 | config.logFormat | string | `"json"` | Log format (json or text) |
 | config.logLevel | string | `"info"` | Log level (debug, info, warn, error) |
-| config.minSeverity | string | `"CRITICAL"` | Minimum severity for notifications (CRITICAL, HIGH, MEDIUM, LOW) |
 | config.namespaces | string | `""` | Namespaces to watch (comma-separated, empty for all) |
 | config.pollInterval | string | `"5m"` | Poll interval for Trivy CRDs |
 | fullnameOverride | string | `""` | Override the full name |
 | healthCheck.port | int | `8080` | Port for health endpoints |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"ghcr.io/kijosec/kijo-agent"` | Image repository |
+| image.repository | string | `"ghcr.io/kijosec/agent"` | Image repository |
 | image.tag | string | `""` | Image tag (defaults to appVersion) |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | livenessProbe.httpGet.path | string | `"/healthz"` |  |
@@ -76,53 +81,32 @@ helm uninstall kijo -n kijo-system
 | livenessProbe.initialDelaySeconds | int | `10` |  |
 | livenessProbe.periodSeconds | int | `30` |  |
 | nameOverride | string | `""` | Override the name |
+| namespace | string | `"kijo"` | Target namespace for deployment (used when namespaceCreate is true) |
+| namespaceCreate | bool | `true` | Create the target namespace (set to false if namespace already exists) |
 | nodeSelector | object | `{}` | Node selector |
-| notifications.saas.apiKey | string | `""` | API key for authentication (use existingSecret for production) |
-| notifications.saas.enabled | bool | `false` | Enable SaaS platform integration |
-| notifications.saas.endpoint | string | `""` | SaaS platform API endpoint (e.g., https://app.kijo.dev) |
-| notifications.saas.existingSecret | string | `""` | Use existing secret for API key |
-| notifications.saas.existingSecretKey | string | `"api-key"` | Key in existing secret |
-| notifications.slack.enabled | bool | `false` | Enable Slack notifications |
-| notifications.slack.existingSecret | string | `""` | Use existing secret for Slack webhook |
-| notifications.slack.existingSecretKey | string | `"webhook-url"` | Key in existing secret |
-| notifications.slack.webhookUrl | string | `""` | Slack webhook URL (use existingSecret for production) |
-| notifications.webhook.enabled | bool | `false` | Enable generic webhook notifications |
-| notifications.webhook.url | string | `""` | Webhook URL |
 | podAnnotations | object | `{}` | Pod annotations |
 | podSecurityContext | object | `{"fsGroup":65534,"runAsNonRoot":true,"runAsUser":65534}` | Pod security context |
-| postgresql.database | string | `"kijo"` | PostgreSQL database |
-| postgresql.enabled | bool | `true` | Deploy PostgreSQL as part of this chart |
-| postgresql.external | object | `{"database":"kijo","existingSecret":"","existingSecretPasswordKey":"password","existingSecretUserKey":"username","host":"","password":"","port":5432,"sslMode":"disable","user":"kijo"}` | Use external PostgreSQL |
-| postgresql.external.database | string | `"kijo"` | External PostgreSQL database |
-| postgresql.external.existingSecret | string | `""` | Use existing secret for PostgreSQL credentials |
-| postgresql.external.existingSecretPasswordKey | string | `"password"` | Key for password in existing secret |
-| postgresql.external.existingSecretUserKey | string | `"username"` | Key for username in existing secret |
-| postgresql.external.host | string | `""` | External PostgreSQL host |
-| postgresql.external.password | string | `""` | External PostgreSQL password (use existingSecret for production) |
-| postgresql.external.port | int | `5432` | External PostgreSQL port |
-| postgresql.external.sslMode | string | `"disable"` | SSL mode |
-| postgresql.external.user | string | `"kijo"` | External PostgreSQL user |
-| postgresql.image.pullPolicy | string | `"IfNotPresent"` |  |
-| postgresql.image.repository | string | `"postgres"` |  |
-| postgresql.image.tag | string | `"16-alpine"` |  |
-| postgresql.password | string | `""` | PostgreSQL password (auto-generated if empty) |
-| postgresql.persistence.accessMode | string | `"ReadWriteOnce"` | Access mode |
-| postgresql.persistence.enabled | bool | `true` | Enable persistence |
-| postgresql.persistence.size | string | `"1Gi"` | PVC size |
-| postgresql.persistence.storageClass | string | `""` | Storage class (empty for default) |
-| postgresql.resources | object | `{"limits":{"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` | PostgreSQL resources |
-| postgresql.user | string | `"kijo"` | PostgreSQL user |
 | readinessProbe.httpGet.path | string | `"/readyz"` |  |
 | readinessProbe.httpGet.port | string | `"health"` |  |
 | readinessProbe.initialDelaySeconds | int | `5` |  |
 | readinessProbe.periodSeconds | int | `10` |  |
-| replicaCount | int | `1` | Number of replicas (only 1 supported for now due to database state) |
+| replicaCount | int | `1` | Number of replicas |
 | resources | object | `{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}` | Resource requests and limits |
-| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | Container security context |
+| saas.apiKey | string | `""` | API key for authentication (use existingSecret for production) |
+| saas.enabled | bool | `false` | Enable SaaS platform integration |
+| saas.endpoint | string | `""` | SaaS platform API endpoint (e.g., https://api.kijosec.dev) |
+| saas.existingSecret | string | `""` | Use existing secret for API key |
+| saas.existingSecretKey | string | `"api-key"` | Key in existing secret |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false}` | Container security context |
 | serviceAccount.annotations | object | `{}` | Annotations for the service account |
 | serviceAccount.create | bool | `true` | Create a service account |
 | serviceAccount.name | string | `""` | Name of the service account (generated if not set) |
 | tolerations | list | `[]` | Tolerations |
+| trivy-operator.compliance | object | `{"enabled":true}` | Enable CIS/NSA/PSS compliance scanning |
+| trivy-operator.enabled | bool | `true` | Enable Trivy Operator as a dependency |
+| trivy-operator.scannerReportTTL | string | `"24h"` | Report TTL - triggers daily re-scans when reports expire Without this, workloads are only scanned on deploy |
+| trivy-operator.trivy.ignoreUnfixed | bool | `false` | Show all vulnerabilities, including those without fixes |
+| trivy-operator.trivy.resources | object | `{"limits":{"cpu":"500m","memory":"2Gi"},"requests":{"cpu":"100m","memory":"500M"}}` | Scan job resources - increased for large images (Cilium, Istio, etc.) Default 100M causes OOMKilled on large images |
 
 ## Configuration Examples
 
